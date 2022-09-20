@@ -1,12 +1,13 @@
 #include <iostream>
 using namespace std;
 
-// This is default sectoin of code that goes throughout the whole calculator
-string x, choose, functionPicker, pick, pickFuncMD, pickFuncAS;
+// These are some of the variable used througout the calculator
+string x, calcPicker, choose, functionPicker, pick, pickFuncMD, pickFuncAS;
 int endProgram;
 
 // Getting usename function
 void gettingUser() {
+	int allNumbers; // need to figure out how to not allow intput of numbers!
 	cout << "What is your name ---> ";
 	cin >> x;
 }
@@ -110,57 +111,86 @@ beginningMD:
 		}
 	}
 }
+// Converting decmial to fractions 
+void decimalToFractionConverter() { // This needs to be fixed so that it is able to reduce farctions
 
-void runProgram() {
+	double decimalNumber;
+
+	cout << x << " what is the decimal number? ---> " << endl;
+	cin >> decimalNumber;
+
+	if (decimalNumber <= 0.9 || decimalNumber < 0) {
+		decimalNumber = decimalNumber * 10;
+
+		cout << x << " your decimal converted into a fraction is ---> " << endl;
+		cout << decimalNumber << "/" << 1*10 << endl;
+	}
+}
+
+// All the functions put together in order to run the program
+void simpleCalculator() {
 	int questionAsker = 0;
 beginningProgram:
+	cout << x << " convert decimal to fraction calculator(cd), simple add, divide, multiply, and subtract calculator(sc)?" << endl;
+	cin >> calcPicker;
 
-	cout << x << " would you like to use addition/subtraction or multiplication/division(as or md)? ---> ";
-	cin >> functionPicker;
+	if (calcPicker == "sc") {
+		cout << x << " would you like to use addition/subtraction or multiplication/division(as or md)? ---> ";
+		cin >> functionPicker;
 
-	if (functionPicker == "as") {
-		addNSub();
-		questionAsker++;
-	}
-	else if (functionPicker == "md") {
-		multiplyNDivision();
-		questionAsker++;
-
-	}
-	else if (functionPicker != "as" || "md") {
-		cout << "Incorrect input " << x << " do you want to try again?(yes/no): " << endl;
-		cin >> pick;
-
-		if (pick == "yes") { // Nested if statement 
-			goto beginningProgram;
+		if (functionPicker == "as") {
+			addNSub();
+			questionAsker++;
 		}
-		else if (pick == "no") {
+		else if (functionPicker == "md") {
+			multiplyNDivision();
+			questionAsker++;
+
+		}
+		else if (functionPicker != "as" || "md") { //checking to make sure that the input is correct
+			cout << "Incorrect input " << x << " do you want to try again?(yes/no): " << endl;
+			cin >> pick;
+
+			if (pick == "yes") {
+				goto beginningProgram;
+			}
+			else if (pick == "no") {
+				endProgram++;
+			}
+			else if (pick != "yes" || "no") { // if user input is still wrong program ends itself
+				cout << "Your input is still incorrect " << x << " program ended..." << endl;
+				endProgram++;
+			}
+		}
+		else if (functionPicker != "yes" || "no") {
 			endProgram++;
 		}
-		else if (pick != "yes" || "no") { // if user input is still wrong program ends itself
-			cout << "Your input is still incorrect " << x << " program ended..." << endl;
+	}
+	// if the picked choice is cd it goes to decimal fraction converter
+		if (calcPicker == "cd") {
+		decimalToFractionConverter();
+		questionAsker++;
+		}
+
+		if (questionAsker == 1) {
+			cout << "Do you want to try again?(yes or no): " << endl;
+			cin >> pick;
+			questionAsker--;
+		}
+		if (pick == "no") {
 			endProgram++;
 		}
-	}
-	else if (functionPicker != "yes" || "no") {
-		endProgram++;
-	}
-	if (questionAsker == 1) {
-		cout << "Do you want to try again?(yes or no): " << endl;
-		cin >> pick;
-		questionAsker--;
-	}
-	if (pick == "no") {
-		endProgram++;
-	}
+	
 }
 
 // Calling all the functions above
 int main() {
 	gettingUser();
-
-	while (endProgram == 0) {
-		runProgram();
+	
+		while (endProgram == 0) {
+		simpleCalculator();
 	}
 	cout << "Calculations are finished " << x << "!";
+
+	return 0;
 }
